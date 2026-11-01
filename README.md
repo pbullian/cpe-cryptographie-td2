@@ -40,9 +40,9 @@ Le message intercepté est dans `/files/s1/message.enc`, avec la clé (`cle.hex`
 
 ## S2 — L'image qui fuit · *symétrique*
 
-> **Dossier TEMPEST.** *1943, laboratoires Bell.* La machine de chiffrement 131-B2 de l'armée américaine est réputée inviolable. Jusqu'au jour où un ingénieur remarque, à l'autre bout de la pièce, un oscilloscope dont les pics suivent chaque lettre tapée : on peut lire le message en clair sans toucher à la machine. Pendant toute la guerre froide, les deux blocs traqueront ces fuites sous le nom de code TEMPEST. Le chiffrement était parfait ; c'est le reste qui parlait.
+> **Dossier TÉHÉRAN.** *4 novembre 1979.* Des étudiants envahissent l'ambassade américaine de Téhéran. À l'intérieur, le personnel a juste le temps de passer les documents classifiés au broyeur : des destructeurs qui coupent le papier en fines bandes verticales. Pendant des années, les bandes sont remises dans l'ordre une à une, à la main, et les documents reconstitués finissent publiés en des dizaines de volumes. Couper n'avait rien détruit : chaque bande gardait sa part du texte.
 >
-> *Version du Bureau.* Le Bureau vient d'installer un service pour transmettre ses images classifiées à nos ambassades. Le directeur en est très fier : « AES-128, la clé ne sort jamais d'ici. » Avant de lui confier les plans de défense, il vous demande de jouer l'espion adverse. Une image classée **TOP SECRET** vient d'être transmise.
+> *Version du Bureau.* Le Bureau vient d'installer un service pour transmettre ses images classifiées à nos ambassades. Le directeur en est très fier : « AES-128, la clé ne sort jamais d'ici. Et par précaution, l'image passe d'abord au broyeur. » Avant de lui confier les plans de défense, il vous demande de jouer l'espion adverse. Une image classée **TOP SECRET** vient d'être transmise.
 
 **Service de chiffrement du Bureau** : <http://localhost:8000> depuis votre navigateur, `http://chiffreur:8000` depuis la toolbox. Il est documenté sur sa page d'accueil. La clé ne quitte jamais le Bureau.
 
