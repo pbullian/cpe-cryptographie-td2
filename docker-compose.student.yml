@@ -1,0 +1,13 @@
+services:
+  toolbox:
+    build: ./toolbox
+    working_dir: /work
+    volumes:
+      - ./files:/files:ro
+      - ./work:/work
+  site:
+    image: nginx:alpine
+    volumes:
+      - ./site:/usr/share/nginx/html:ro
+    ports:
+      - "8080:80"

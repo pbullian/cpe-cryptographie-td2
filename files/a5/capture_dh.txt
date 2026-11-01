@@ -1,0 +1,10 @@
+Capture reseau entre Alice et Bob (echange Diffie-Hellman), puis un message chiffre.
+
+p = 3227821
+g = 2
+A = 1857358    (Alice -> Bob : g^a mod p)
+B = 1745640    (Bob -> Alice : g^b mod p)
+
+Message chiffre en AES-128-CBC avec cle = SHA256(str(secret_partage))[:16]
+iv = bf0a7dfaf85af3c296ec0be1e11eec5d
+ct = 7dc7428e05c1a5af3907ad386db307ff8bb171f603b1c97d8eb8772ac4156552

@@ -1,0 +1,8 @@
+Bob a publie sa cle publique RSA :
+  n = 143
+  e = 7
+
+Bob a construit n en multipliant deux nombres premiers.
+Alice lui a envoye un message : chaque caractere (code ASCII) a ete chiffre separement.
+
+  c = 89 141 108 7 49 80 59 17 59 17 4 59 17 21 59 118 33 5
