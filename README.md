@@ -87,9 +87,9 @@ docker compose -f docker-compose.student.yml run --rm toolbox sh /work/<dossier>
 
 ## S5 — Diffie-Hellman écouté · *échange de clés*
 
-> **Dossier IVY BELLS.** *Années 1970, mer d'Okhotsk.* Un sous-marin américain se pose par 120 mètres de fond et pose une bretelle d'écoute sur un câble sous-marin soviétique. Persuadée que personne ne pourrait jamais l'atteindre, la marine soviétique y faisait passer ses communications presque sans protection. L'écoute durera des années, jusqu'à ce qu'un ancien analyste de la NSA vende le secret au KGB.
+> **Dossier LOGJAM.** Pendant la guerre froide, les États-Unis classent la cryptographie parmi les munitions : interdit d'exporter un chiffrement fort. Dans les années 1990, les logiciels vendus à l'étranger n'ont donc droit qu'à une crypto « export », volontairement bridée, dont un Diffie-Hellman sur des nombres premiers de 512 bits. *Mai 2015* : des chercheurs montrent (attaque *Logjam*) que ces petits nombres premiers peuvent encore être imposés à des serveurs et cassés, et qu'une poignée de nombres premiers partagés par des millions de serveurs pourrait suffire à un État pour écouter une grande partie du trafic chiffré.
 >
-> *Version du Bureau.* Deux sous-marins adverses, l'*Amiral Korsakov* et le *Volna*, remontent vers le détroit de Gibraltar. Pour se parler, ils commencent par un échange de clés Diffie-Hellman, puis chiffrent leurs ordres. Leur matériel de bord date de l'époque d'Ivy Bells. Le capitaine de corvette Morel pose le relevé de la station d'écoute de Toulon sur votre bureau : « S'ils préparent une attaque, je veux le savoir avant l'aube. »
+> *Version du Bureau.* Deux sous-marins adverses, l'*Amiral Korsakov* et le *Volna*, remontent vers le détroit de Gibraltar. Pour se parler, ils commencent par un échange de clés Diffie-Hellman, puis chiffrent leurs ordres. Leur matériel de bord, acheté à l'étranger, n'a eu droit qu'à la version « export ». Le capitaine de corvette Morel pose le relevé de la station d'écoute de Toulon sur votre bureau : « S'ils préparent une attaque, je veux le savoir avant l'aube. »
 
 `/files/s5/capture_dh.txt` : l'échange intercepté entre les deux sous-marins, suivi de leur message chiffré.
 
