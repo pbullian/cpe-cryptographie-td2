@@ -29,15 +29,40 @@ MODES = {
 }
 
 PAGE = """<!doctype html><html lang="fr"><meta charset="utf-8"><title>Service de chiffrement du Bureau</title>
-<body style="font-family:system-ui,sans-serif;max-width:720px;margin:0 auto;padding:24px 16px;background:#f4f1ea">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body{font-family:system-ui,sans-serif;max-width:760px;margin:0 auto;padding:24px 16px;background:#f4f1ea;color:#1d1d1d;line-height:1.5}
+h1{border-bottom:3px solid #1d1d1d;padding-bottom:6px}
+h2{font-size:1.05em;margin-top:1.6em}
+code{background:#fff;padding:1px 5px}
+table{border-collapse:collapse;width:100%;font-size:.95em}
+td,th{text-align:left;padding:7px 8px;border-bottom:1px solid #d6d0c4;vertical-align:top}
+td code{display:inline-block;word-break:break-all}
+.note{background:#fff3cd;padding:8px 10px;font-size:.95em}
+</style>
+<body>
 <h1>Service de chiffrement du Bureau</h1>
-<p>Le Bureau transmet ses images classifiees chiffrees en <strong>AES-128</strong>.
-Vous pouvez recuperer la derniere image transmise, chiffree avec le mode de votre choix.</p>
+<p>Le Bureau transmet ses images classifiées chiffrées en <strong>AES-128</strong>.
+Vous pouvez récupérer la dernière image transmise, chiffrée avec le mode de votre choix.</p>
 <ul>
-<li><code>GET /image</code> &mdash; mode par defaut (<code>cbc</code>)</li>
-<li><code>GET /image?mode=MODE</code> &mdash; modes disponibles : <code>cbc</code>, <code>ctr</code>, <code>ecb</code></li>
+<li><code>GET /image</code> : mode par défaut (<code>cbc</code>)</li>
+<li><code>GET /image?mode=MODE</code> : modes disponibles : <code>cbc</code>, <code>ctr</code>, <code>ecb</code></li>
 </ul>
-<p>La cle reste au Bureau. L'en-tete du fichier BMP n'est pas chiffre, seuls les pixels le sont.</p>
+<p>La clé reste au Bureau. L'en-tête du fichier BMP n'est pas chiffré, seuls les pixels le sont.</p>
+
+<h2>Récupérer l'image</h2>
+<table>
+<tr><th>Depuis</th><th>Commande</th></tr>
+<tr><td>la toolbox</td><td><code>curl -o /work/image.bmp http://chiffreur:8000/image</code></td></tr>
+<tr><td>macOS, Linux (terminal)</td><td><code>curl -o image.bmp http://localhost:8000/image</code></td></tr>
+<tr><td>Windows (PowerShell)</td><td><code>curl.exe -o image.bmp http://localhost:8000/image</code></td></tr>
+<tr><td>Windows (invite de commandes)</td><td><code>curl -o image.bmp http://localhost:8000/image</code></td></tr>
+</table>
+<p class="note">Dans PowerShell, <code>curl</code> seul désigne une autre commande : tapez bien <code>curl.exe</code>
+(ou <code>Invoke-WebRequest http://localhost:8000/image -OutFile image.bmp</code>).
+Vous pouvez aussi ouvrir <a href="/image">/image</a> dans le navigateur : le fichier se télécharge.</p>
+<p>L'image est au format BMP : elle s'ouvre avec Aperçu (macOS), Photos (Windows) ou la visionneuse d'images (Linux).
+Récupérée depuis la toolbox, elle apparaît dans <code>./work</code> sur votre poste.</p>
 </body></html>"""
 
 
