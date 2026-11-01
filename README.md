@@ -13,21 +13,20 @@ Cinq missions courtes, au format CTF : chiffrement symétrique (AES), RSA, signa
 
 Au sous-sol d'un immeuble sans plaque, quai Saint-Antoine à Lyon, le **Bureau Central du Chiffre** forme ses nouvelles recrues d'une manière bien à lui : il rejoue les grandes affaires de la **guerre froide**, transposées avec les outils d'aujourd'hui. Les décors ont changé, les erreurs sont restées les mêmes.
 
-Cinq dossiers déclassifiés sont posés sur la table. Chacun est **inspiré d'une affaire réelle**. Pas de nom de code, pas d'arme : un terminal et une boîte à outils.
+Cinq dossiers sont posés sur la table. Quatre sont des affaires déclassifiées, **inspirées de faits réels**. Le cinquième porte un tampon que personne n'a jamais vu au Bureau : il est daté de **2045**.
 
-Cinq missions. Cinq drapeaux. *Le Bureau nie toute implication.*
+Pas de nom de code, pas d'arme : un terminal et une boîte à outils. Cinq missions, cinq drapeaux. *Le Bureau nie toute implication.*
 
 ## Mise en route (tout tourne dans Docker)
 
 ```bash
-docker compose -f docker-compose.student.yml up -d --build
+docker compose -f docker-compose.student.yml up -d --build      # lance la toolbox et les services des missions
 docker compose -f docker-compose.student.yml run --rm toolbox bash
-# fichiers des missions : /files (lecture seule) · dossier de travail : /work (= ./work sur votre poste)
 ```
 
-- **Sites des corporations** : Amadrone <http://localhost:8081>, SpaceY <http://localhost:8082>, Looker <http://localhost:8083> depuis votre navigateur ; `http://amadrone`, `http://spacey`, `http://looker` depuis la toolbox.
-- **Service de chiffrement du Bureau** : adresse donnée en cours.
-- Pour tout arrêter : `docker compose -f docker-compose.student.yml down`.
+Dans la toolbox, les fichiers des missions sont dans `/files` (lecture seule) et votre dossier de travail est `/work` (= `./work` sur votre poste). Les adresses à utiliser sont indiquées dans chaque mission.
+
+Pour tout arrêter : `docker compose -f docker-compose.student.yml down`.
 
 ---
 
@@ -45,7 +44,7 @@ Le message intercepté est dans `/files/s1/message.enc`, avec la clé (`cle.hex`
 >
 > *Version du Bureau.* Le Bureau vient d'installer un service pour transmettre ses images classifiées à nos ambassades. Le directeur en est très fier : « AES-128, la clé ne sort jamais d'ici. » Avant de lui confier les plans de défense, il vous demande de jouer l'espion adverse. Une image classée **TOP SECRET** vient d'être transmise.
 
-Le service de chiffrement du Bureau est documenté sur sa page d'accueil. La clé ne quitte jamais le Bureau.
+**Service de chiffrement du Bureau** : son adresse est donnée par l'enseignant en début de séance. Il est documenté sur sa page d'accueil. La clé ne quitte jamais le Bureau.
 
 ## A1 — RSA à la main · *asymétrique*
 
@@ -57,11 +56,15 @@ Le service de chiffrement du Bureau est documenté sur sa page d'accueil. La cl�
 
 ## A3 — Le bon firmware · *signature*
 
-> **Dossier RUBICON.** Pendant toute la guerre froide, plus de cent pays achètent leurs machines de chiffrement à une entreprise suisse réputée neutre : Crypto AG. En 2020, la presse révèle que la société appartenait secrètement à la CIA et au BND, qui avaient affaibli les machines vendues. Pendant des décennies, des gouvernements ont chiffré leurs secrets avec un outil qui travaillait pour l'adversaire.
->
-> *Simulation du Bureau : un futur proche.* Les implants neuronaux sont devenus aussi banals que les téléphones. Le vôtre, un **NX-7** logé dans l'avant-bras gauche, réclame la mise à jour **Neurolien v2.1**. Trois corporations rivales la distribuent et se disputent votre cortex : **Amadrone**, **SpaceY** et **Looker**. Depuis cette nuit, la rumeur parle de serveurs piratés. Un mauvais firmware, et votre cerveau travaille pour quelqu'un d'autre.
+> **Dossier NEUROLIEN.** *Lyon, 2045.* Les implants neuronaux sont devenus aussi banals que les téléphones l'étaient au début du siècle. Le vôtre, un **NX-7** logé dans l'avant-bras gauche, réclame la mise à jour **Neurolien v2.1**. Trois corporations rivales la distribuent et se disputent votre cortex : **Amadrone**, **SpaceY** et **Looker**. Depuis cette nuit, la rumeur parle de serveurs piratés. Un mauvais firmware, et votre cerveau travaille pour quelqu'un d'autre.
 
 Les trois corporations proposent le firmware. Chaque version donne une clé d'activation différente ; une seule est authentique.
+
+| Corporation | Depuis votre navigateur | Depuis la toolbox |
+|---|---|---|
+| Amadrone | <http://localhost:8081> | `http://amadrone` |
+| SpaceY | <http://localhost:8082> | `http://spacey` |
+| Looker | <http://localhost:8083> | `http://looker` |
 
 ## A5 — Diffie-Hellman écouté · *échange de clés*
 
