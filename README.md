@@ -79,7 +79,7 @@ Les trois corporations proposent le firmware. Chaque version donne une clé d'ac
 | SpaceY | <http://localhost:8082> | `http://spacey` |
 | Looker | <http://localhost:8083> | `http://looker` |
 
-Pour installer un firmware, rangez ses fichiers dans un dossier de `work/` et lancez-le dans la toolbox, jamais directement sur votre poste :
+Pour installer un firmware, rangez-le dans un dossier de `work/` et lancez-le dans la toolbox, jamais directement sur votre poste :
 
 ```bash
 docker compose -f docker-compose.student.yml run --rm toolbox sh /work/<dossier>/neurolien-v2.1.sh
