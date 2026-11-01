@@ -79,6 +79,12 @@ Les trois corporations proposent le firmware. Chaque version donne une clé d'ac
 | SpaceY | <http://localhost:8082> | `http://spacey` |
 | Looker | <http://localhost:8083> | `http://looker` |
 
+Pour installer un firmware, rangez ses fichiers dans un dossier de `work/` et lancez-le dans la toolbox, jamais directement sur votre poste :
+
+```bash
+docker compose -f docker-compose.student.yml run --rm toolbox sh /work/<dossier>/neurolien-v2.1.sh
+```
+
 ## S5 — Diffie-Hellman écouté · *échange de clés*
 
 > **Dossier IVY BELLS.** *Années 1970, mer d'Okhotsk.* Un sous-marin américain se pose par 120 mètres de fond et pose une bretelle d'écoute sur un câble sous-marin soviétique. Persuadée que personne ne pourrait jamais l'atteindre, la marine soviétique y faisait passer ses communications presque sans protection. L'écoute durera des années, jusqu'à ce qu'un ancien analyste de la NSA vende le secret au KGB.

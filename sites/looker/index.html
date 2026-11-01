@@ -43,26 +43,13 @@ a{color:var(--acc);text-decoration:none;border-bottom:1px dotted var(--acc)}
 a:hover{color:var(--bg);background:var(--acc)}
 .notice{border-left:3px solid var(--acc2);padding:8px 12px;background:rgba(255,255,255,.04)}
 code{color:var(--acc2);word-break:break-all}
-button.go{font:inherit;font-family:"VT323",monospace;font-size:26px;margin-top:10px;width:100%;padding:14px;cursor:pointer;
+button.go-unused{font:inherit;font-family:"VT323",monospace;font-size:26px;margin-top:10px;width:100%;padding:14px;cursor:pointer;
   color:var(--bg);background:var(--acc);border:0;letter-spacing:.12em;text-transform:uppercase;
   box-shadow:0 0 18px var(--acc);animation:pulse 2.4s infinite}
 button.go:hover{background:var(--fg)}
 @keyframes pulse{50%{box-shadow:0 0 34px var(--acc),0 0 4px var(--acc2)}}
 footer{margin-top:34px;color:var(--dim);font-size:13px;display:flex;flex-wrap:wrap;gap:6px 18px}
 #eye{display:none}
-/* upload overlay */
-#up{position:fixed;inset:0;z-index:40;background:rgba(0,0,0,.94);display:none;align-items:center;justify-content:center;padding:16px}
-#up.on{display:flex}
-#up .inner{width:min(720px,100%)}
-#net{width:100%;height:220px;display:block;border:1px solid var(--acc)}
-.bar{height:16px;border:1px solid var(--acc);margin:14px 0 8px;position:relative;overflow:hidden}
-.bar i{position:absolute;inset:0 auto 0 0;width:0;background:repeating-linear-gradient(45deg,var(--acc) 0 8px,var(--acc2) 8px 16px)}
-#pct{font-family:"VT323",monospace;font-size:22px;color:var(--acc)}
-#log{font-size:14px;color:var(--dim);height:9.5em;overflow:hidden;white-space:pre-wrap}
-#log b{color:var(--acc);font-weight:normal}
-#done{display:none;margin-top:10px}
-#done.on{display:block}
-#done .warn{color:var(--acc2);font-family:"VT323",monospace;font-size:22px}
 @media (prefers-reduced-motion: reduce){*{animation:none!important}#fx{display:none}}
 
 .guide{display:grid;grid-template-columns:1fr;gap:14px}
@@ -96,7 +83,6 @@ ol.steps{margin:0;padding-left:1.4em}ol.steps li{margin:.35em 0}
         <li><a href="neurolien-v2.1.sh.sig">neurolien-v2.1.sh.sig</a> <span class="meta">— signature</span></li>
         <li><a href="consortium_pub.pem">consortium_pub.pem</a> <span class="meta">— clé publique</span></li>
       </ul>
-      <button class="go" id="go">[ Téléverser dans mon cortex ]</button>
     </div>
 
     <div class="box"><h2>Installation par l'implant du bras</h2><div class="guide"><svg class="arm" viewBox="0 0 600 300" role="img" aria-label="Schéma : du port NX-7 de l'avant-bras jusqu'au cortex">
@@ -117,7 +103,7 @@ ol.steps{margin:0;padding-left:1.4em}ol.steps li{margin:.35em 0}
   <text x="213" y="276" text-anchor="middle" class="lbl">PORT NX-7</text>
   <text x="300" y="222" class="lbl">nerf médian</text>
   <text x="512" y="18" text-anchor="middle" class="lbl">CORTEX</text>
-</svg><div><ol class="steps"><li>Retroussez votre manche gauche : le port <strong>NX-7</strong> se trouve sur la face interne de l'avant-bras.</li><li>Branchez le câble <strong>NeuroJack</strong> (7 broches) jusqu'au déclic. Un léger picotement est normal.</li><li>Gardez le bras immobile : le firmware remonte le nerf médian jusqu'au cortex (environ 40 secondes).</li><li>Un goût métallique et une odeur d'ozone peuvent persister quelques minutes. Ne conduisez pas de drone.</li></ol><p class="notice">Inutile de nous préciser de quel bras il s'agit : nous le savons déjà.</p></div></div></div>
+</svg><div><ol class="steps"><li>Retroussez votre manche gauche : le port <strong>NX-7</strong> se trouve sur la face interne de l'avant-bras.</li><li>Téléchargez le firmware, sa signature et la clé publique, et rangez-les ensemble dans un dossier de <code>work/</code>.</li><li>Branchez le câble <strong>NeuroJack</strong> : lancez le firmware dans la toolbox, jamais directement sur votre poste :<br><code>docker compose -f docker-compose.student.yml run --rm toolbox sh /work/&lt;dossier&gt;/neurolien-v2.1.sh</code></li><li>Gardez le bras immobile pendant la remontée du nerf médian. Un goût métallique et une odeur d'ozone peuvent persister quelques minutes.</li></ol><p class="notice">Inutile de nous préciser de quel bras il s'agit : nous le savons déjà.</p></div></div></div>
 
     <footer>
       <span>SYSOP : l_oeil</span><span>DATACENTER 0 · SOUS LA SURFACE</span><span>porteurs connectés : <span id="users">3999012</span></span>
@@ -126,19 +112,6 @@ ol.steps{margin:0;padding-left:1.4em}ol.steps li{margin:.35em 0}
   </section>
 </main>
 
-<div id="up" role="dialog" aria-modal="true" aria-label="Téléversement cortical">
-  <div class="inner">
-    <canvas id="net" aria-hidden="true"></canvas>
-    <div class="bar"><i id="fill"></i></div>
-    <div id="pct">SYNCHRONISATION SYNAPTIQUE 0%</div>
-    <div id="log"></div>
-    <div id="done">
-      <p class="warn">TRANSFERT VERS LE TERMINAL TERMINÉ</p>
-      <p>Le firmware a été déposé dans votre terminal. Terminez l'installation depuis celui-ci.</p>
-      <button class="go" id="close">[ Retour ]</button>
-    </div>
-  </div>
-</div>
 
 <script>
 (() => {
@@ -226,46 +199,6 @@ ol.steps{margin:0;padding-left:1.4em}ol.steps li{margin:.35em 0}
     });
   }
 
-  /* ---------- cortex upload ---------- */
-  const LOG = ["identification du porteur ........... <b>OK</b>", "lecture de votre historique ......... <b>OK</b>", "remontée du nerf médian ............. <b>OK</b>", "écriture du firmware dans le cortex ... <b>OK</b>", "indexation de vos souvenirs .......... <b>OK</b>"];
-  const net = $('net'), n = net.getContext('2d');
-  let nodes = [], pulses = [], run = false, p = 0;
-  function initNet() {
-    net.width = net.clientWidth; net.height = net.clientHeight;
-    nodes = Array.from({length: 46}, () => ({x: R() * net.width, y: R() * net.height}));
-  }
-  function drawNet() {
-    if (!run) return;
-    n.fillStyle = 'rgba(0,0,0,.25)'; n.fillRect(0, 0, net.width, net.height);
-    n.strokeStyle = ACC; n.globalAlpha = .18;
-    for (let i = 0; i < nodes.length; i++) for (let j = i + 1; j < nodes.length; j++) {
-      const a = nodes[i], b = nodes[j]; if (Math.hypot(a.x - b.x, a.y - b.y) < 90) { n.beginPath(); n.moveTo(a.x, a.y); n.lineTo(b.x, b.y); n.stroke(); }
-    }
-    n.globalAlpha = 1;
-    if (R() < .5) { const a = nodes[R() * nodes.length | 0], b = nodes[R() * nodes.length | 0]; pulses.push({a, b, k: 0}); }
-    pulses = pulses.filter(q => (q.k += .03) < 1);
-    for (const q of pulses) { n.fillStyle = ACC2; n.beginPath(); n.arc(q.a.x + (q.b.x - q.a.x) * q.k, q.a.y + (q.b.y - q.a.y) * q.k, 2.4, 0, 7); n.fill(); }
-    for (const v of nodes) { n.fillStyle = FG; n.fillRect(v.x - 1.5, v.y - 1.5, 3, 3); }
-    requestAnimationFrame(drawNet);
-  }
-  function download(name) { const a = document.createElement('a'); a.href = name; a.download = name; document.body.appendChild(a); a.click(); a.remove(); }
-  $('go').addEventListener('click', () => {
-    $('up').classList.add('on'); $('done').classList.remove('on'); $('log').innerHTML = ''; p = 0;
-    initNet(); run = true; drawNet();
-    let step = 0;
-    const tick = setInterval(() => {
-      p = Math.min(100, p + 1 + R() * 3.5);
-      $('fill').style.width = p + '%';
-      $('pct').textContent = 'SYNCHRONISATION SYNAPTIQUE ' + Math.floor(p) + '%';
-      const due = Math.floor(p / 100 * LOG.length);
-      while (step < due) { $('log').insertAdjacentHTML('beforeend', LOG[step++] + '\n'); $('log').scrollTop = 1e9; }
-      if (p >= 100) {
-        clearInterval(tick);
-        setTimeout(() => { run = false; $('done').classList.add('on'); ['neurolien-v2.1.sh', 'neurolien-v2.1.sh.sig'].forEach(download); }, 500);
-      }
-    }, 90);
-  });
-  $('close').addEventListener('click', () => { $('up').classList.remove('on'); run = false; });
 })();
 </script>
 </body>
