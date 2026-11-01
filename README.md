@@ -46,6 +46,19 @@ Le message intercepté est dans `/files/s1/message.enc`, avec la clé (`cle.hex`
 
 **Service de chiffrement du Bureau** : <http://localhost:8000> depuis votre navigateur, `http://chiffreur:8000` depuis la toolbox. Il est documenté sur sa page d'accueil. La clé ne quitte jamais le Bureau.
 
+Pour récupérer l'image transmise :
+
+| Depuis | Commande |
+|---|---|
+| la toolbox | `curl -o /work/image.bmp http://chiffreur:8000/image` |
+| macOS, Linux (terminal) | `curl -o image.bmp http://localhost:8000/image` |
+| Windows (PowerShell) | `curl.exe -o image.bmp http://localhost:8000/image` |
+| Windows (invite de commandes) | `curl -o image.bmp http://localhost:8000/image` |
+
+Dans PowerShell, `curl` seul désigne une autre commande : tapez bien `curl.exe` (ou `Invoke-WebRequest http://localhost:8000/image -OutFile image.bmp`). Vous pouvez aussi ouvrir <http://localhost:8000/image> dans le navigateur : le fichier se télécharge.
+
+L'image est au format BMP : elle s'ouvre avec Aperçu (macOS), Photos (Windows) ou la visionneuse d'images (Linux). Récupérée depuis la toolbox, elle apparaît dans `./work` sur votre poste.
+
 ## S3 — RSA à la main · *asymétrique*
 
 > **Dossier NICKEL.** *Brooklyn, 1953.* Un jeune livreur de journaux laisse tomber une pièce de cinq cents : elle s'ouvre en deux. À l'intérieur, un microfilm couvert de chiffres. Le FBI mettra quatre ans à le lire : il faudra qu'un espion soviétique passe à l'Ouest pour expliquer son chiffre, entièrement fait au crayon. *Août 1977* : dans sa rubrique du *Scientific American*, Martin Gardner présente au grand public un chiffre révolutionnaire « qui demanderait des millions d'années à casser » : RSA.
