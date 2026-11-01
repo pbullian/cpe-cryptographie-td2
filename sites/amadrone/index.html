@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Amadrone // NEUROLIEN</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b0907;--fg:#eadcc8;--acc:#ff8a00;--acc2:#ff3b1f;--dim:#8c7a66}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:var(--bg);color:var(--fg)}
+body{font-family:"Share Tech Mono",ui-monospace,Menlo,Consolas,monospace;font-size:16px;line-height:1.45;overflow-x:hidden}
+#fx{position:fixed;inset:0;width:100%;height:100%;z-index:0;opacity:.55}
+.crt{pointer-events:none;position:fixed;inset:0;z-index:50;
+  background:repeating-linear-gradient(to bottom,rgba(0,0,0,0) 0,rgba(0,0,0,0) 2px,rgba(0,0,0,.28) 3px);
+  box-shadow:inset 0 0 160px rgba(0,0,0,.9);animation:flicker 6s infinite}
+@keyframes flicker{0%,100%{opacity:1}47%{opacity:1}48%{opacity:.82}49%{opacity:1}92%{opacity:.9}}
+main{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:28px 16px 60px}
+#boot{font-family:"VT323",monospace;font-size:22px;color:var(--dim);white-space:pre-wrap;min-height:9em}
+#boot .ok{color:var(--acc)}
+.cursor{display:inline-block;width:.6em;height:1em;background:var(--acc);vertical-align:-2px;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+#panel{display:none}
+#panel.on{display:block;animation:rise .6s ease-out}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.logo{margin:4px 0 14px}
+.logo svg{display:block;width:min(100%,620px);height:auto;filter:drop-shadow(0 0 5px var(--acc)) drop-shadow(0 0 18px var(--acc))}
+.logo.glitch{animation:glitch .35s steps(2) 1}
+@keyframes glitch{0%{transform:translate(0)}25%{transform:translate(-3px,1px);text-shadow:3px 0 var(--acc2),-3px 0 var(--fg)}
+  50%{transform:translate(3px,-1px)}75%{transform:translate(-1px,2px);text-shadow:-3px 0 var(--acc2),3px 0 var(--fg)}100%{transform:none}}
+.slogan{font-family:"VT323",monospace;font-size:26px;color:var(--fg);letter-spacing:.04em;margin:0 0 22px}
+.slogan::before{content:"» ";color:var(--acc2)}
+.box{border:1px solid var(--acc);padding:16px 18px;margin:18px 0;background:rgba(0,0,0,.55);position:relative}
+.box h2{position:absolute;top:-.8em;left:12px;margin:0;padding:0 8px;background:var(--bg);font-size:15px;font-weight:normal;
+  color:var(--acc);letter-spacing:.18em;text-transform:uppercase}
+.box p{margin:.4em 0}
+.meta{color:var(--dim);font-size:14px}
+ul.files{list-style:none;padding:0;margin:.6em 0}
+ul.files li{padding:4px 0;border-bottom:1px dashed rgba(255,255,255,.12)}
+ul.files li::before{content:"▸ ";color:var(--acc2)}
+a{color:var(--acc);text-decoration:none;border-bottom:1px dotted var(--acc)}
+a:hover{color:var(--bg);background:var(--acc)}
+.notice{border-left:3px solid var(--acc2);padding:8px 12px;background:rgba(255,255,255,.04)}
+code{color:var(--acc2);word-break:break-all}
+button.go{font:inherit;font-family:"VT323",monospace;font-size:26px;margin-top:10px;width:100%;padding:14px;cursor:pointer;
+  color:var(--bg);background:var(--acc);border:0;letter-spacing:.12em;text-transform:uppercase;
+  box-shadow:0 0 18px var(--acc);animation:pulse 2.4s infinite}
+button.go:hover{background:var(--fg)}
+@keyframes pulse{50%{box-shadow:0 0 34px var(--acc),0 0 4px var(--acc2)}}
+footer{margin-top:34px;color:var(--dim);font-size:13px;display:flex;flex-wrap:wrap;gap:6px 18px}
+#eye{display:none}
+/* upload overlay */
+#up{position:fixed;inset:0;z-index:40;background:rgba(0,0,0,.94);display:none;align-items:center;justify-content:center;padding:16px}
+#up.on{display:flex}
+#up .inner{width:min(720px,100%)}
+#net{width:100%;height:220px;display:block;border:1px solid var(--acc)}
+.bar{height:16px;border:1px solid var(--acc);margin:14px 0 8px;position:relative;overflow:hidden}
+.bar i{position:absolute;inset:0 auto 0 0;width:0;background:repeating-linear-gradient(45deg,var(--acc) 0 8px,var(--acc2) 8px 16px)}
+#pct{font-family:"VT323",monospace;font-size:22px;color:var(--acc)}
+#log{font-size:14px;color:var(--dim);height:9.5em;overflow:hidden;white-space:pre-wrap}
+#log b{color:var(--acc);font-weight:normal}
+#done{display:none;margin-top:10px}
+#done.on{display:block}
+#done .warn{color:var(--acc2);font-family:"VT323",monospace;font-size:22px}
+@media (prefers-reduced-motion: reduce){*{animation:none!important}#fx{display:none}}
+
+.guide{display:grid;grid-template-columns:1fr;gap:14px}
+@media(min-width:720px){.guide{grid-template-columns:1.1fr 1fr;align-items:center}}
+svg.arm{width:100%;height:auto;background:rgba(0,0,0,.4)}
+svg.arm .lbl{font:13px "Share Tech Mono",monospace;fill:var(--dim);letter-spacing:.08em}
+svg.arm .flow{stroke-dasharray:6 12;animation:flow 1.1s linear infinite}
+svg.arm .brain{animation:glow 2s ease-in-out infinite}
+@keyframes flow{to{stroke-dashoffset:-36}}
+@keyframes glow{50%{stroke-width:3.5;filter:drop-shadow(0 0 6px var(--acc2))}}
+ol.steps{margin:0;padding-left:1.4em}ol.steps li{margin:.35em 0}
+</style>
+</head>
+<body data-motif="amadrone">
+<canvas id="fx" aria-hidden="true"></canvas>
+<div class="crt" aria-hidden="true"></div>
+<main>
+  <div id="boot" aria-live="polite"></div>
+  <section id="panel">
+    
+    <div class="logo" id="logo"><svg viewBox="0 0 474 54" role="img" aria-label="AMADRONE"><g fill="var(--acc2)" opacity=".55"><rect x="13" y="3" width="9" height="9"/><rect x="23" y="3" width="9" height="9"/><rect x="33" y="3" width="9" height="9"/><rect x="3" y="13" width="9" height="9"/><rect x="43" y="13" width="9" height="9"/><rect x="3" y="23" width="9" height="9"/><rect x="13" y="23" width="9" height="9"/><rect x="23" y="23" width="9" height="9"/><rect x="33" y="23" width="9" height="9"/><rect x="43" y="23" width="9" height="9"/><rect x="3" y="33" width="9" height="9"/><rect x="43" y="33" width="9" height="9"/><rect x="3" y="43" width="9" height="9"/><rect x="43" y="43" width="9" height="9"/><rect x="63" y="3" width="9" height="9"/><rect x="103" y="3" width="9" height="9"/><rect x="63" y="13" width="9" height="9"/><rect x="73" y="13" width="9" height="9"/><rect x="93" y="13" width="9" height="9"/><rect x="103" y="13" width="9" height="9"/><rect x="63" y="23" width="9" height="9"/><rect x="83" y="23" width="9" height="9"/><rect x="103" y="23" width="9" height="9"/><rect x="63" y="33" width="9" height="9"/><rect x="103" y="33" width="9" height="9"/><rect x="63" y="43" width="9" height="9"/><rect x="103" y="43" width="9" height="9"/><rect x="133" y="3" width="9" height="9"/><rect x="143" y="3" width="9" height="9"/><rect x="153" y="3" width="9" height="9"/><rect x="123" y="13" width="9" height="9"/><rect x="163" y="13" width="9" height="9"/><rect x="123" y="23" width="9" height="9"/><rect x="133" y="23" width="9" height="9"/><rect x="143" y="23" width="9" height="9"/><rect x="153" y="23" width="9" height="9"/><rect x="163" y="23" width="9" height="9"/><rect x="123" y="33" width="9" height="9"/><rect x="163" y="33" width="9" height="9"/><rect x="123" y="43" width="9" height="9"/><rect x="163" y="43" width="9" height="9"/><rect x="183" y="3" width="9" height="9"/><rect x="193" y="3" width="9" height="9"/><rect x="203" y="3" width="9" height="9"/><rect x="213" y="3" width="9" height="9"/><rect x="183" y="13" width="9" height="9"/><rect x="223" y="13" width="9" height="9"/><rect x="183" y="23" width="9" height="9"/><rect x="223" y="23" width="9" height="9"/><rect x="183" y="33" width="9" height="9"/><rect x="223" y="33" width="9" height="9"/><rect x="183" y="43" width="9" height="9"/><rect x="193" y="43" width="9" height="9"/><rect x="203" y="43" width="9" height="9"/><rect x="213" y="43" width="9" height="9"/><rect x="243" y="3" width="9" height="9"/><rect x="253" y="3" width="9" height="9"/><rect x="263" y="3" width="9" height="9"/><rect x="273" y="3" width="9" height="9"/><rect x="243" y="13" width="9" height="9"/><rect x="283" y="13" width="9" height="9"/><rect x="243" y="23" width="9" height="9"/><rect x="253" y="23" width="9" height="9"/><rect x="263" y="23" width="9" height="9"/><rect x="273" y="23" width="9" height="9"/><rect x="243" y="33" width="9" height="9"/><rect x="273" y="33" width="9" height="9"/><rect x="243" y="43" width="9" height="9"/><rect x="283" y="43" width="9" height="9"/><rect x="313" y="3" width="9" height="9"/><rect x="323" y="3" width="9" height="9"/><rect x="333" y="3" width="9" height="9"/><rect x="303" y="13" width="9" height="9"/><rect x="343" y="13" width="9" height="9"/><rect x="303" y="23" width="9" height="9"/><rect x="343" y="23" width="9" height="9"/><rect x="303" y="33" width="9" height="9"/><rect x="343" y="33" width="9" height="9"/><rect x="313" y="43" width="9" height="9"/><rect x="323" y="43" width="9" height="9"/><rect x="333" y="43" width="9" height="9"/><rect x="363" y="3" width="9" height="9"/><rect x="403" y="3" width="9" height="9"/><rect x="363" y="13" width="9" height="9"/><rect x="373" y="13" width="9" height="9"/><rect x="403" y="13" width="9" height="9"/><rect x="363" y="23" width="9" height="9"/><rect x="383" y="23" width="9" height="9"/><rect x="403" y="23" width="9" height="9"/><rect x="363" y="33" width="9" height="9"/><rect x="393" y="33" width="9" height="9"/><rect x="403" y="33" width="9" height="9"/><rect x="363" y="43" width="9" height="9"/><rect x="403" y="43" width="9" height="9"/><rect x="423" y="3" width="9" height="9"/><rect x="433" y="3" width="9" height="9"/><rect x="443" y="3" width="9" height="9"/><rect x="453" y="3" width="9" height="9"/><rect x="463" y="3" width="9" height="9"/><rect x="423" y="13" width="9" height="9"/><rect x="423" y="23" width="9" height="9"/><rect x="433" y="23" width="9" height="9"/><rect x="443" y="23" width="9" height="9"/><rect x="453" y="23" width="9" height="9"/><rect x="423" y="33" width="9" height="9"/><rect x="423" y="43" width="9" height="9"/><rect x="433" y="43" width="9" height="9"/><rect x="443" y="43" width="9" height="9"/><rect x="453" y="43" width="9" height="9"/><rect x="463" y="43" width="9" height="9"/></g><g fill="var(--acc)"><rect x="10" y="0" width="9" height="9"/><rect x="20" y="0" width="9" height="9"/><rect x="30" y="0" width="9" height="9"/><rect x="0" y="10" width="9" height="9"/><rect x="40" y="10" width="9" height="9"/><rect x="0" y="20" width="9" height="9"/><rect x="10" y="20" width="9" height="9"/><rect x="20" y="20" width="9" height="9"/><rect x="30" y="20" width="9" height="9"/><rect x="40" y="20" width="9" height="9"/><rect x="0" y="30" width="9" height="9"/><rect x="40" y="30" width="9" height="9"/><rect x="0" y="40" width="9" height="9"/><rect x="40" y="40" width="9" height="9"/><rect x="60" y="0" width="9" height="9"/><rect x="100" y="0" width="9" height="9"/><rect x="60" y="10" width="9" height="9"/><rect x="70" y="10" width="9" height="9"/><rect x="90" y="10" width="9" height="9"/><rect x="100" y="10" width="9" height="9"/><rect x="60" y="20" width="9" height="9"/><rect x="80" y="20" width="9" height="9"/><rect x="100" y="20" width="9" height="9"/><rect x="60" y="30" width="9" height="9"/><rect x="100" y="30" width="9" height="9"/><rect x="60" y="40" width="9" height="9"/><rect x="100" y="40" width="9" height="9"/><rect x="130" y="0" width="9" height="9"/><rect x="140" y="0" width="9" height="9"/><rect x="150" y="0" width="9" height="9"/><rect x="120" y="10" width="9" height="9"/><rect x="160" y="10" width="9" height="9"/><rect x="120" y="20" width="9" height="9"/><rect x="130" y="20" width="9" height="9"/><rect x="140" y="20" width="9" height="9"/><rect x="150" y="20" width="9" height="9"/><rect x="160" y="20" width="9" height="9"/><rect x="120" y="30" width="9" height="9"/><rect x="160" y="30" width="9" height="9"/><rect x="120" y="40" width="9" height="9"/><rect x="160" y="40" width="9" height="9"/><rect x="180" y="0" width="9" height="9"/><rect x="190" y="0" width="9" height="9"/><rect x="200" y="0" width="9" height="9"/><rect x="210" y="0" width="9" height="9"/><rect x="180" y="10" width="9" height="9"/><rect x="220" y="10" width="9" height="9"/><rect x="180" y="20" width="9" height="9"/><rect x="220" y="20" width="9" height="9"/><rect x="180" y="30" width="9" height="9"/><rect x="220" y="30" width="9" height="9"/><rect x="180" y="40" width="9" height="9"/><rect x="190" y="40" width="9" height="9"/><rect x="200" y="40" width="9" height="9"/><rect x="210" y="40" width="9" height="9"/><rect x="240" y="0" width="9" height="9"/><rect x="250" y="0" width="9" height="9"/><rect x="260" y="0" width="9" height="9"/><rect x="270" y="0" width="9" height="9"/><rect x="240" y="10" width="9" height="9"/><rect x="280" y="10" width="9" height="9"/><rect x="240" y="20" width="9" height="9"/><rect x="250" y="20" width="9" height="9"/><rect x="260" y="20" width="9" height="9"/><rect x="270" y="20" width="9" height="9"/><rect x="240" y="30" width="9" height="9"/><rect x="270" y="30" width="9" height="9"/><rect x="240" y="40" width="9" height="9"/><rect x="280" y="40" width="9" height="9"/><rect x="310" y="0" width="9" height="9"/><rect x="320" y="0" width="9" height="9"/><rect x="330" y="0" width="9" height="9"/><rect x="300" y="10" width="9" height="9"/><rect x="340" y="10" width="9" height="9"/><rect x="300" y="20" width="9" height="9"/><rect x="340" y="20" width="9" height="9"/><rect x="300" y="30" width="9" height="9"/><rect x="340" y="30" width="9" height="9"/><rect x="310" y="40" width="9" height="9"/><rect x="320" y="40" width="9" height="9"/><rect x="330" y="40" width="9" height="9"/><rect x="360" y="0" width="9" height="9"/><rect x="400" y="0" width="9" height="9"/><rect x="360" y="10" width="9" height="9"/><rect x="370" y="10" width="9" height="9"/><rect x="400" y="10" width="9" height="9"/><rect x="360" y="20" width="9" height="9"/><rect x="380" y="20" width="9" height="9"/><rect x="400" y="20" width="9" height="9"/><rect x="360" y="30" width="9" height="9"/><rect x="390" y="30" width="9" height="9"/><rect x="400" y="30" width="9" height="9"/><rect x="360" y="40" width="9" height="9"/><rect x="400" y="40" width="9" height="9"/><rect x="420" y="0" width="9" height="9"/><rect x="430" y="0" width="9" height="9"/><rect x="440" y="0" width="9" height="9"/><rect x="450" y="0" width="9" height="9"/><rect x="460" y="0" width="9" height="9"/><rect x="420" y="10" width="9" height="9"/><rect x="420" y="20" width="9" height="9"/><rect x="430" y="20" width="9" height="9"/><rect x="440" y="20" width="9" height="9"/><rect x="450" y="20" width="9" height="9"/><rect x="420" y="30" width="9" height="9"/><rect x="420" y="40" width="9" height="9"/><rect x="430" y="40" width="9" height="9"/><rect x="440" y="40" width="9" height="9"/><rect x="450" y="40" width="9" height="9"/><rect x="460" y="40" width="9" height="9"/></g></svg></div>
+    <p class="slogan">Livré dans votre cortex avant même que vous ne le désiriez.</p>
+
+    <div class="box">
+      <h2>Mise à jour disponible</h2>
+      <p><strong>NEUROLIEN v2.1</strong> — firmware de liaison neurale pour implants <strong>NX-7</strong>.</p>
+      <p class="meta">Protocole du Consortium Neurolien · build 2.1.0 · taille 1,2 Mo</p>
+      <p>Firmware officiel du Consortium Neurolien, livré par drone en 0,3 milliseconde. </p>
+      <ul class="files">
+        <li><a href="neurolien-v2.1.sh">neurolien-v2.1.sh</a> <span class="meta">— firmware</span></li>
+        <li><a href="neurolien-v2.1.sh.sig">neurolien-v2.1.sh.sig</a> <span class="meta">— signature</span></li>
+        <li><a href="consortium_pub.pem">consortium_pub.pem</a> <span class="meta">— clé publique</span></li>
+      </ul>
+      <button class="go" id="go">[ Téléverser dans mon cortex ]</button>
+    </div>
+
+    <div class="box"><h2>Installation par l'implant du bras</h2><div class="guide"><svg class="arm" viewBox="0 0 600 300" role="img" aria-label="Schéma : du port NX-7 de l'avant-bras jusqu'au cortex">
+  <rect x="10" y="262" width="92" height="26" fill="none" stroke="var(--acc2)" stroke-width="2"/>
+  <text x="56" y="280" text-anchor="middle" class="lbl">NEUROJACK</text>
+  <path d="M102 270 C 160 290, 190 285, 208 252" fill="none" stroke="var(--fg)" stroke-width="4" opacity=".7"/>
+  <path d="M450 200 L330 255 L118 238" fill="none" stroke="var(--acc)" stroke-width="38" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M450 200 L330 255 L118 238" fill="none" stroke="var(--bg)" stroke-width="34" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="98" cy="236" r="21" fill="var(--bg)" stroke="var(--acc)" stroke-width="2"/>
+  <path d="M430 196 L585 196" stroke="var(--acc)" stroke-width="2"/>
+  <path d="M497 146 L492 192 M528 146 L533 192" stroke="var(--acc)" stroke-width="2"/>
+  <circle cx="512" cy="88" r="58" fill="var(--bg)" stroke="var(--acc)" stroke-width="2"/>
+  <path d="M478 80 q8 -22 22 -8 q10 -18 24 -2 q16 -6 14 12 q12 10 -2 22 q4 16 -16 14 q-8 14 -22 2 q-18 6 -18 -12 q-14 -10 -2 -28z"
+        fill="none" stroke="var(--acc2)" stroke-width="2" class="brain"/>
+  <rect x="196" y="236" width="34" height="16" fill="var(--bg)" stroke="var(--acc2)" stroke-width="2"/>
+  <path d="M201 244h2m3 0h2m3 0h2m3 0h2m3 0h2m3 0h2m3 0h2" stroke="var(--acc2)" stroke-width="3"/>
+  <path class="flow" d="M213 244 L330 250 L452 196 L508 150 L512 100" fill="none" stroke="var(--acc2)" stroke-width="3"/>
+  <text x="213" y="276" text-anchor="middle" class="lbl">PORT NX-7</text>
+  <text x="300" y="222" class="lbl">nerf médian</text>
+  <text x="512" y="18" text-anchor="middle" class="lbl">CORTEX</text>
+</svg><div><ol class="steps"><li>Retroussez votre manche gauche : le port <strong>NX-7</strong> se trouve sur la face interne de l'avant-bras.</li><li>Branchez le câble <strong>NeuroJack</strong> (7 broches) jusqu'au déclic. Un léger picotement est normal.</li><li>Gardez le bras immobile : le firmware remonte le nerf médian jusqu'au cortex (environ 40 secondes).</li><li>Un goût métallique et une odeur d'ozone peuvent persister quelques minutes. Ne conduisez pas de drone.</li></ol><p class="notice">Pendant le transfert, votre bras rejoint temporairement le réseau logistique Amadrone. Merci pour votre contribution.</p></div></div></div>
+
+    <footer>
+      <span>SYSOP : drone_dispatch_0451</span><span>NŒUD 7 · ENTREPÔT NEURAL DE SAINT-PRIEST</span><span>porteurs connectés : <span id="users">48211</span></span>
+      <span>Univers fictif et parodique — TD2 CPE Lyon</span>
+    </footer>
+  </section>
+</main>
+
+<div id="up" role="dialog" aria-modal="true" aria-label="Téléversement cortical">
+  <div class="inner">
+    <canvas id="net" aria-hidden="true"></canvas>
+    <div class="bar"><i id="fill"></i></div>
+    <div id="pct">SYNCHRONISATION SYNAPTIQUE 0%</div>
+    <div id="log"></div>
+    <div id="done">
+      <p class="warn">TRANSFERT VERS LE TERMINAL TERMINÉ</p>
+      <p>Le firmware a été déposé dans votre terminal. Terminez l'installation depuis celui-ci.</p>
+      <button class="go" id="close">[ Retour ]</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const motif = document.body.dataset.motif;
+  const css = getComputedStyle(document.documentElement);
+  const ACC = css.getPropertyValue('--acc').trim(), ACC2 = css.getPropertyValue('--acc2').trim(), FG = css.getPropertyValue('--fg').trim();
+
+  /* ---------- boot sequence (typewriter) ---------- */
+  const BOOT = ["ATDT 0 800 NEURO-7", "CONNECT 14400/ARQ/V42BIS", "*** AMADRONE PRIME — BBS NEURAL ***", "Scan rétinien ...................... OK", "Implant NX-7 détecté ................ OK", "Bienvenue, client n° 48 211 902. Votre panier cortical vous attend."];
+  const boot = $('boot');
+  let li = 0, ci = 0;
+  function type() {
+    if (li >= BOOT.length) { boot.insertAdjacentHTML('beforeend', '<span class="cursor"></span>'); setTimeout(show, 350); return; }
+    const line = BOOT[li];
+    if (ci === 0) boot.insertAdjacentHTML('beforeend', '<div></div>');
+    const div = boot.lastElementChild;
+    ci++;
+    div.innerHTML = line.slice(0, ci).replace(/OK$/, '<span class="ok">OK</span>');
+    if (ci >= line.length) { li++; ci = 0; setTimeout(type, 160); } else setTimeout(type, 14 + Math.random() * 22);
+  }
+  function show() { $('panel').classList.add('on'); }
+  if (reduce) { boot.textContent = BOOT.join('\n'); show(); } else type();
+
+  /* ---------- logo glitch ---------- */
+  setInterval(() => { const l = $('logo'); l.classList.remove('glitch'); void l.offsetWidth; l.classList.add('glitch'); }, 4200);
+  setInterval(() => { const u = $('users'); u.textContent = (+u.textContent + Math.round(Math.random() * 6 - 2)).toLocaleString('fr-FR').replace(/\s/g, ''); }, 1800);
+
+  /* ---------- background motif ---------- */
+  const fx = $('fx'), g = fx.getContext('2d');
+  let W, H; const resize = () => { W = fx.width = innerWidth; H = fx.height = innerHeight; }; resize(); addEventListener('resize', resize);
+  const R = Math.random;
+  const drones = Array.from({length: 26}, () => ({x: R() * 1600 - 200, y: R() * 900, v: .4 + R() * 1.2, s: 6 + R() * 10, ph: R() * 6}));
+  const stars = Array.from({length: 260}, () => ({x: R() * 2 - 1, y: R() * 2 - 1, z: R()}));
+  let t = 0, scan = 0;
+  function frame() {
+    t += 1;
+    if (motif === 'amadrone') {
+      g.fillStyle = 'rgba(10,8,6,.35)'; g.fillRect(0, 0, W, H);
+      for (const d of drones) {
+        d.x += d.v; if (d.x > W + 40) { d.x = -40; d.y = R() * H; }
+        const y = d.y + Math.sin(t / 30 + d.ph) * 6;
+        g.strokeStyle = ACC; g.globalAlpha = .7; g.lineWidth = 1.2;
+        g.beginPath(); g.moveTo(d.x - d.s, y); g.lineTo(d.x + d.s, y); g.stroke();
+        g.beginPath(); g.arc(d.x - d.s, y - 2, d.s * .45, 0, 7); g.arc(d.x + d.s, y - 2, d.s * .45, 0, 7); g.stroke();
+        g.fillStyle = ACC2; g.fillRect(d.x - 2, y - 1, 4, 5);
+        if (t % 90 < 3) { g.fillStyle = '#ff2a00'; g.fillRect(d.x - 1, y + 4, 2, 2); }
+        g.globalAlpha = 1;
+      }
+    } else if (motif === 'spacey') {
+      g.fillStyle = 'rgba(2,4,8,.45)'; g.fillRect(0, 0, W, H);
+      const cx = W / 2, cy = H / 2;
+      for (const s of stars) {
+        s.z -= .004; if (s.z <= .02) { s.x = R() * 2 - 1; s.y = R() * 2 - 1; s.z = 1; }
+        const px = cx + s.x / s.z * cx * .5, py = cy + s.y / s.z * cy * .5, r = (1 - s.z) * 2.2;
+        g.fillStyle = FG; g.globalAlpha = 1 - s.z; g.fillRect(px, py, r, r);
+      }
+      g.globalAlpha = .5; g.strokeStyle = ACC; g.beginPath(); g.ellipse(cx, cy * 1.15, W * .42, H * .11, -.18, 0, 7); g.stroke();
+      const a = t / 140; g.fillStyle = ACC2; g.globalAlpha = 1;
+      g.beginPath(); g.arc(cx + Math.cos(a) * W * .42, cy * 1.15 + Math.sin(a) * H * .11, 3, 0, 7); g.fill();
+    } else {
+      g.fillStyle = 'rgba(6,2,10,.4)'; g.fillRect(0, 0, W, H);
+      g.strokeStyle = ACC; g.globalAlpha = .08;
+      for (let x = 0; x < W; x += 40) { g.beginPath(); g.moveTo(x, 0); g.lineTo(x, H); g.stroke(); }
+      for (let y = 0; y < H; y += 40) { g.beginPath(); g.moveTo(0, y); g.lineTo(W, y); g.stroke(); }
+      scan = (scan + 2.2) % (H + 120);
+      const gr = g.createLinearGradient(0, scan - 120, 0, scan); gr.addColorStop(0, 'transparent'); gr.addColorStop(1, ACC2);
+      g.globalAlpha = .22; g.fillStyle = gr; g.fillRect(0, scan - 120, W, 120);
+    }
+    g.globalAlpha = 1;
+    requestAnimationFrame(frame);
+  }
+  if (!reduce) frame();
+
+  /* ---------- looker: the eye follows you ---------- */
+  const eye = document.getElementById('eye');
+  if (eye) {
+    eye.style.display = 'block';
+    const pupil = eye.querySelector('.pupil');
+    addEventListener('mousemove', e => {
+      const r = eye.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+      const a = Math.atan2(e.clientY - cy, e.clientX - cx), d = Math.min(18, Math.hypot(e.clientX - cx, e.clientY - cy) / 14);
+      pupil.setAttribute('transform', `translate(${Math.cos(a) * d * 1.6},${Math.sin(a) * d * .9})`);
+    });
+  }
+
+  /* ---------- cortex upload ---------- */
+  const LOG = ["négociation du port NX-7 ............ <b>OK</b>", "réservation d'un drone de livraison ... <b>OK</b>", "analyse de vos habitudes d'achat ...... <b>OK</b>", "remontée du nerf médian ............. <b>OK</b>", "écriture du firmware dans le cortex ... <b>OK</b>", "ajout au panier : 3 produits suggérés .. <b>OK</b>"];
+  const net = $('net'), n = net.getContext('2d');
+  let nodes = [], pulses = [], run = false, p = 0;
+  function initNet() {
+    net.width = net.clientWidth; net.height = net.clientHeight;
+    nodes = Array.from({length: 46}, () => ({x: R() * net.width, y: R() * net.height}));
+  }
+  function drawNet() {
+    if (!run) return;
+    n.fillStyle = 'rgba(0,0,0,.25)'; n.fillRect(0, 0, net.width, net.height);
+    n.strokeStyle = ACC; n.globalAlpha = .18;
+    for (let i = 0; i < nodes.length; i++) for (let j = i + 1; j < nodes.length; j++) {
+      const a = nodes[i], b = nodes[j]; if (Math.hypot(a.x - b.x, a.y - b.y) < 90) { n.beginPath(); n.moveTo(a.x, a.y); n.lineTo(b.x, b.y); n.stroke(); }
+    }
+    n.globalAlpha = 1;
+    if (R() < .5) { const a = nodes[R() * nodes.length | 0], b = nodes[R() * nodes.length | 0]; pulses.push({a, b, k: 0}); }
+    pulses = pulses.filter(q => (q.k += .03) < 1);
+    for (const q of pulses) { n.fillStyle = ACC2; n.beginPath(); n.arc(q.a.x + (q.b.x - q.a.x) * q.k, q.a.y + (q.b.y - q.a.y) * q.k, 2.4, 0, 7); n.fill(); }
+    for (const v of nodes) { n.fillStyle = FG; n.fillRect(v.x - 1.5, v.y - 1.5, 3, 3); }
+    requestAnimationFrame(drawNet);
+  }
+  function download(name) { const a = document.createElement('a'); a.href = name; a.download = name; document.body.appendChild(a); a.click(); a.remove(); }
+  $('go').addEventListener('click', () => {
+    $('up').classList.add('on'); $('done').classList.remove('on'); $('log').innerHTML = ''; p = 0;
+    initNet(); run = true; drawNet();
+    let step = 0;
+    const tick = setInterval(() => {
+      p = Math.min(100, p + 1 + R() * 3.5);
+      $('fill').style.width = p + '%';
+      $('pct').textContent = 'SYNCHRONISATION SYNAPTIQUE ' + Math.floor(p) + '%';
+      const due = Math.floor(p / 100 * LOG.length);
+      while (step < due) { $('log').insertAdjacentHTML('beforeend', LOG[step++] + '\n'); $('log').scrollTop = 1e9; }
+      if (p >= 100) {
+        clearInterval(tick);
+        setTimeout(() => { run = false; $('done').classList.add('on'); ['neurolien-v2.1.sh', 'neurolien-v2.1.sh.sig'].forEach(download); }, 500);
+      }
+    }, 90);
+  });
+  $('close').addEventListener('click', () => { $('up').classList.remove('on'); run = false; });
+})();
+</script>
+</body>
+</html>

@@ -5,9 +5,21 @@ services:
     volumes:
       - ./files:/files:ro
       - ./work:/work
-  site:
+  amadrone:
     image: nginx:alpine
     volumes:
-      - ./site:/usr/share/nginx/html:ro
+      - ./sites/amadrone:/usr/share/nginx/html:ro
     ports:
-      - "8080:80"
+      - "8081:80"
+  spacey:
+    image: nginx:alpine
+    volumes:
+      - ./sites/spacey:/usr/share/nginx/html:ro
+    ports:
+      - "8082:80"
+  looker:
+    image: nginx:alpine
+    volumes:
+      - ./sites/looker:/usr/share/nginx/html:ro
+    ports:
+      - "8083:80"
